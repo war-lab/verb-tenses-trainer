@@ -22,7 +22,7 @@ export function Header() {
   }, [location.pathname]);
 
   const navLinks = [
-    { to: '/', label: 'Trainer' },
+    { to: '/trainer', label: 'Trainer' },
     { to: '/compare', label: 'Compare' },
     { to: '/future', label: 'Guide' },
   ];

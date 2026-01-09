@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { TrainerPage } from './pages/TrainerPage';
 import { ComparePage } from './pages/ComparePage';
 import { FutureGuidePage } from './pages/FutureGuidePage';
@@ -11,7 +11,8 @@ function Layout() {
 
       <main className="max-w-5xl mx-auto px-4 py-8">
         <Routes>
-          <Route path="/" element={<TrainerPage />} />
+          <Route path="/" element={<Navigate to="/trainer" replace />} />
+          <Route path="/trainer" element={<TrainerPage />} />
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/future" element={<FutureGuidePage />} />
         </Routes>
