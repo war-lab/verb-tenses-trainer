@@ -18,7 +18,7 @@ function Layout() {
       </main>
 
       <footer className="text-center text-gray-400 text-sm mt-12 mb-4">
-        © 2024 Verb Tenses Trainer MVP
+        © 2026 Verb Tenses Trainer
       </footer>
     </div>
   );
