@@ -30,7 +30,7 @@ export function conjugate(
   }
 
   // --- Helpers ---
-  const addSpace = () => { /* tokens implicitly spaced by renderer, but we just return tokens */ };
+
   const push = (text: string, kind: Token['kind'], highlight = false) => {
     tokens.push({ text, kind, highlight });
   };
@@ -39,7 +39,7 @@ export function conjugate(
   // --- Tense/Aspect State Machine ---
 
   // 1. Future Mode Helpers
-  const isWill = futureMode === 'will';
+
   const isGoingTo = futureMode === 'goingTo';
   const isProgFuture = futureMode === 'progFuture'; // "I am meeting him"
   const isAboutTo = futureMode === 'aboutTo';

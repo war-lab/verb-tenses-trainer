@@ -8,6 +8,10 @@ import { TenseControls } from '../components/TenseControls';
 import { GeneratedSentence } from '../components/GeneratedSentence';
 import { NuanceNote } from '../components/NuanceNote';
 
+import { StateSummary } from '../components/StateSummary';
+import { SectionHeader } from '../components/ui/SectionHeader';
+import { Lightbulb } from 'lucide-react';
+
 export function TrainerPage() {
   const [sentenceId, setSentenceId] = useState(sentences[0].id);
   const [tense, setTense] = useState<Tense>('Present');
@@ -23,16 +27,8 @@ export function TrainerPage() {
   }, [sentenceTemplate, tense, aspect, futureMode]);
 
   const currentNuance = useMemo(() => {
-    // Basic nuance selection logic
     const n = sentenceTemplate.nuance;
-    if (tense === 'Past') return n.simplePast; // Simplified: Past Perfect etc not fully mapped in template nuances, falling back might be needed or extending template
-    if (tense === 'Future') return n.simpleFuture;
-
-    // Present logic (and general Aspect logic which might override)
-    // The nuance object structure in data is: { simplePresent, simplePast, simpleFuture, progressive, perfect, perfectProgressive }
-    // This structure is a bit simplified compared to the full matrix (3 tenses x 4 aspects).
-    // Let's try to map best fit.
-
+    // Aspect takes precedence over Simple Tense nuances in this MVP mapping
     if (aspect.perfect && aspect.progressive) return n.perfectProgressive;
     if (aspect.perfect) return n.perfect;
     if (aspect.progressive) return n.progressive;
@@ -44,35 +40,50 @@ export function TrainerPage() {
   }, [sentenceTemplate, tense, aspect]);
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Training Mode for {sentenceTemplate.subject}</h2>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
 
-      <div className="card mb-6">
-        <SentencePicker
-          selectedId={sentenceId}
-          onSelect={(s) => setSentenceId(s.id)}
-        />
 
-        <hr className="my-6 border-gray-100" />
+      <main className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-8">
 
-        <TenseControls
-          tense={tense}
-          aspect={aspect}
-          futureMode={futureMode}
-          onChangeTense={setTense}
-          onChangeAspect={setAspect}
-          onChangeFutureMode={setFutureMode}
-          allowedFutureModes={sentenceTemplate.allowedFutureModes}
-        />
-      </div>
+        {/* Left Column: Inputs */}
+        <div className="md:col-span-7 space-y-8">
+          <SentencePicker
+            selectedId={sentenceId}
+            onSelect={(s) => setSentenceId(s.id)}
+          />
 
-      <div className="card bg-white shadow-lg border-blue-100">
-        <div className="text-center mb-2 text-sm text-gray-400 font-bold uppercase tracking-widest">
-          Output
+          <hr className="border-slate-200 dark:border-slate-800" />
+
+          <TenseControls
+            tense={tense}
+            aspect={aspect}
+            futureMode={futureMode}
+            onChangeTense={setTense}
+            onChangeAspect={setAspect}
+            onChangeFutureMode={setFutureMode}
+            allowedFutureModes={sentenceTemplate.allowedFutureModes}
+          />
         </div>
-        <GeneratedSentence result={result} />
-        <NuanceNote nuance={currentNuance} />
-      </div>
+
+        {/* Right Column: Outputs (Sticky) */}
+        <div className="md:col-span-5">
+          <div className="md:sticky md:top-24 space-y-6">
+            <div className="hidden md:block">
+              <SectionHeader title="Output Preview" description="生成結果" />
+            </div>
+
+            <StateSummary tense={tense} aspect={aspect} />
+
+            <GeneratedSentence result={result} />
+
+            <div className="mt-8">
+              <SectionHeader title="Nuance Note" icon={Lightbulb} className="mb-4" />
+              <NuanceNote nuance={currentNuance} />
+            </div>
+          </div>
+        </div>
+
+      </main>
     </div>
   );
 }

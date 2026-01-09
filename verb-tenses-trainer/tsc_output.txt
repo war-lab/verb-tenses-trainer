@@ -1,0 +1,2 @@
+src/pages/TrainerPage.tsx(41,9): error TS2367: This comparison appears to be unintentional because the types '"Present"' and '"Past"' have no overlap.
+src/pages/TrainerPage.tsx(42,9): error TS2367: This comparison appears to be unintentional because the types '"Present"' and '"Future"' have no overlap.
