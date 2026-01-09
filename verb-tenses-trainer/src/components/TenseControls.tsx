@@ -36,19 +36,27 @@ export function TenseControls({
     <div className="flex flex-col gap-6">
       {/* Tense Tabs */}
       <div>
-        <div className="flex bg-gray-100 p-1 rounded-lg inline-flex">
-          {(['Past', 'Present', 'Future'] as const).map((t) => (
+        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">
+          時制 (Time Frame)
+        </label>
+        <div className="flex bg-slate-100 p-1 rounded-xl inline-flex shadow-inner">
+          {[
+            { id: 'Past', label: 'Past', sub: '過去' },
+            { id: 'Present', label: 'Present', sub: '現在' },
+            { id: 'Future', label: 'Future', sub: '未来' }
+          ].map((t) => (
             <button
-              key={t}
+              key={t.id}
               className={classNames(
-                'px-4 py-2 rounded-md transition-all text-sm font-bold',
-                tense === t
-                  ? 'bg-white text-blue-600 shadow-sm border-transparent'
-                  : 'bg-transparent text-gray-500 hover:text-gray-700 border-transparent'
+                'px-6 py-3 rounded-lg transition-all text-sm flex flex-col items-center min-w-[100px]',
+                tense === t.id
+                  ? 'bg-white text-blue-600 shadow-sm ring-1 ring-black/5 font-bold'
+                  : 'bg-transparent text-gray-500 hover:text-gray-700 hover:bg-slate-200'
               )}
-              onClick={() => onChangeTense(t)}
+              onClick={() => onChangeTense(t.id as Tense)}
             >
-              {t}
+              <span className="text-base">{t.label}</span>
+              <span className="text-xs opacity-80 font-normal">{t.sub}</span>
             </button>
           ))}
         </div>
