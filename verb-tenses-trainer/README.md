@@ -6,12 +6,16 @@
 - **Trainer Mode**: 20種類の例文から選択し、時制（過去/現在/未来）とアスペクト（完了/進行）を自由に切り替えて、英文法構造の変化と意味合いを確認できます。
 - **Compare Mode**: 未来表現（will / be going to / 進行形）など、類似した表現を並べて比較し、ニュアンスの違いを学びます。
 - **Future Guide**: 迷いやすい未来表現の使い分けについての解説ガイドです。
+- **ダークモード**: ヘッダーのトグルボタンでライト/ダークテーマを切り替え可能。
+- **レスポンシブデザイン**: デスクトップでは2カラムレイアウト、モバイルではハンバーガーメニューで最適化された表示。
 
 ## 技術スタック (Tech Stack)
 - React
 - TypeScript
 - Vite
 - React Router
+- Tailwind CSS v3 (スタイリング)
+- Lucide React (アイコン)
 - GitHub Actions (for Deployment)
 
 ## 開発の始め方 (Getting Started)
