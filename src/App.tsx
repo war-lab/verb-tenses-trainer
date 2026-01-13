@@ -9,7 +9,7 @@ function Layout() {
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 pb-20">
       <Header />
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 lg:px-8 py-8">
         <Routes>
           <Route path="/" element={<Navigate to="/trainer" replace />} />
           <Route path="/trainer" element={<TrainerPage />} />
@@ -27,7 +27,7 @@ function Layout() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/verb-tenses-trainer">
       <Layout />
     </BrowserRouter>
   );

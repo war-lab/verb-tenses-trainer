@@ -4,7 +4,6 @@ import { BookOpen, Sparkles } from "lucide-react";
 
 interface ResultBarProps {
   onShowLesson: () => void;
-  hasWarning: boolean;
 }
 
 export const ResultBar: React.FC<ResultBarProps> = ({

@@ -11,8 +11,8 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-14 bg-white/80 backdrop-blur-md border-b border-slate-200 z-30">
-      <nav className="max-w-md mx-auto px-4 flex justify-between h-14">
+    <header className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-slate-200 z-30">
+      <nav className="max-w-7xl mx-auto px-4 lg:px-8 flex justify-between h-14">
         {navItems.map((item) => (
           <NavLink
             key={item.to}
