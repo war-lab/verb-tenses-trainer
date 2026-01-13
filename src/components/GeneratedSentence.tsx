@@ -1,48 +1,47 @@
-import { ConjugatedResult } from '../domain/types';
-import { cn } from '../lib/cn';
-import { Card } from './ui/Card';
+import React from "react";
+import { Token } from "../lib/types";
+import { Badge } from "./ui/Badge";
+import { cn } from "../lib/cn";
 
-type Props = {
-  result: ConjugatedResult;
-};
+interface GeneratedSentenceProps {
+  tokens: Token[];
+  breakdown?: string[];
+}
 
-export function GeneratedSentence({ result }: Props) {
-  const { tokens, warning } = result;
-
+export const GeneratedSentence: React.FC<GeneratedSentenceProps> = ({
+  tokens,
+  breakdown,
+}) => {
   return (
-    <div className="space-y-6">
-      <Card className="min-h-[160px] flex items-center justify-center p-8 bg-slate-50 dark:bg-slate-900/50 border-dashed border-2">
-        <div key={tokens.map(t => t.text).join('')} className="text-2xl md:text-4xl text-center leading-relaxed animate-fade-in font-serif">
-          {tokens.map((token, index) => (
-            <span
-              key={index}
-              className={cn(
-                "inline-block mx-[0.15em] px-[0.3em] py-[0.1em] rounded-md transition-all duration-300",
-                token.highlight ? "font-bold shadow-sm ring-1 ring-inset" : "text-slate-800 dark:text-slate-200",
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-3 p-4 bg-muted/30 rounded-2xl min-h-[4rem] text-2xl md:text-3xl font-medium tracking-tight">
+        {tokens.map((token, idx) => (
+          <span
+            key={idx}
+            className={cn(
+              "transition-all duration-300",
+              token.highlight && "text-indigo-600 font-bold underline decoration-indigo-300 decoration-4 underline-offset-8 bg-indigo-50/50 px-1 rounded",
+              token.kind === "subject" && "text-slate-900",
+              token.kind === "be" && "text-amber-600",
+              token.kind === "have" && "text-emerald-600",
+              token.kind === "aux" && "text-indigo-600",
+              token.kind === "verb" && token.highlight ? "" : token.kind === "verb" ? "text-slate-800" : ""
+            )}
+          >
+            {token.text}
+          </span>
+        ))}
+      </div>
 
-                // Specific highlight colors based on kind
-                token.kind === 'aux' && "bg-pink-100 text-pink-700 ring-pink-500/20 dark:bg-pink-900/30 dark:text-pink-300",
-                token.kind === 'verb' && "bg-blue-100 text-blue-700 ring-blue-500/20 dark:bg-blue-900/30 dark:text-blue-300",
-                (token.kind === 'have' || token.kind === 'be') && "bg-amber-100 text-amber-700 ring-amber-500/20 dark:bg-amber-900/30 dark:text-amber-300",
-
-                token.kind === 'normal' && "bg-transparent ring-0"
-              )}
-            >
-              {token.text}
-            </span>
+      {breakdown && breakdown.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {breakdown.map((item, idx) => (
+            <Badge key={idx} variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs px-2 py-0.5">
+              {item}
+            </Badge>
           ))}
-        </div>
-      </Card>
-
-      {warning && (
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-orange-50 text-orange-800 border border-orange-200 shadow-sm dark:bg-orange-950/30 dark:text-orange-200 dark:border-orange-900 animate-fade-in">
-          <span className="text-xl">⚠️</span>
-          <div>
-            <div className="font-bold text-sm">Advice Check</div>
-            <div className="text-sm opacity-90">{warning.message}</div>
-          </div>
         </div>
       )}
     </div>
   );
-}
+};
