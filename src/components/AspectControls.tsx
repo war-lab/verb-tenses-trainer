@@ -35,7 +35,7 @@ export const AspectControls: React.FC<AspectControlsProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <SectionHeader title="アスペクト (Aspect)" />
       <div className="flex gap-3">
         <button

@@ -13,7 +13,7 @@ export const GeneratedSentence: React.FC<GeneratedSentenceProps> = ({
   breakdown,
 }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-3 p-4 bg-muted/30 rounded-2xl min-h-[4rem] text-2xl md:text-3xl font-medium tracking-tight">
         {tokens.map((token, idx) => (
           <span

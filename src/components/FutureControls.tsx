@@ -38,8 +38,8 @@ export const FutureControls: React.FC<FutureControlsProps> = ({
   const allowedNuances = template.allowedWillNuances || [];
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-4">
+    <div className="space-y-4">
+      <div className="space-y-3">
         <SectionHeader title="未来の表現 (Future Mode)" />
         <div className="grid grid-cols-2 gap-2">
           {FUTURE_MODES.map((mode) => {

@@ -10,7 +10,7 @@ type Props = {
 
 export function SectionHeader({ title, description, icon: Icon, className }: Props) {
   return (
-    <div className={cn("flex items-start gap-4 mb-6", className)}>
+    <div className={cn("flex items-start gap-4 mb-4", className)}>
       {Icon && (
         <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
           <Icon className="w-5 h-5" />

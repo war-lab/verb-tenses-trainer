@@ -2,6 +2,7 @@ import React from "react";
 import { Tense } from "../lib/types";
 import { Button } from "./ui/Button";
 import { SectionHeader } from "./ui/SectionHeader";
+import { cn } from "../lib/cn";
 
 interface TenseControlsProps {
   selectedTense: Tense;
@@ -17,7 +18,7 @@ export const TenseControls: React.FC<TenseControlsProps> = ({
   onPastUseChange,
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <SectionHeader title="時制 (Tense)" />
       <div className="grid grid-cols-3 gap-2">
         {(["Past", "Present", "Future"] as Tense[]).map((tense) => (
@@ -33,20 +34,26 @@ export const TenseControls: React.FC<TenseControlsProps> = ({
       </div>
 
       {selectedTense === "Past" && (
-        <div className="flex bg-muted p-1 rounded-lg gap-1 border">
+        <div className="flex bg-slate-100 p-1.5 rounded-xl gap-1.5 border border-slate-200 shadow-inner">
           <Button
-            variant={pastUse === "time" ? "secondary" : "ghost"}
+            variant={pastUse === "time" ? "premium" : "ghost"}
             size="sm"
             onClick={() => onPastUseChange("time")}
-            className="flex-1 text-xs"
+            className={cn(
+              "flex-1 text-xs font-bold transition-all h-9 rounded-lg",
+              pastUse === "time" ? "shadow-md" : "text-slate-500"
+            )}
           >
             時間軸の過去
           </Button>
           <Button
-            variant={pastUse === "polite" ? "secondary" : "ghost"}
+            variant={pastUse === "polite" ? "premium" : "ghost"}
             size="sm"
             onClick={() => onPastUseChange("polite")}
-            className="flex-1 text-xs"
+            className={cn(
+              "flex-1 text-xs font-bold transition-all h-9 rounded-lg",
+              pastUse === "polite" ? "shadow-md" : "text-slate-500"
+            )}
           >
             丁寧な距離感
           </Button>

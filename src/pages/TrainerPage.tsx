@@ -83,19 +83,19 @@ const TrainerPage: React.FC = () => {
         }}
       />
 
-      <main className="max-w-7xl mx-auto p-4 lg:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <main className="max-w-7xl mx-auto p-4 lg:p-6 text-slate-900">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
           {/* Left Column: Controls & Output */}
-          <div className="lg:col-span-7 space-y-8 max-w-2xl mx-auto w-full">
+          <div className="lg:col-span-7 space-y-6 max-w-2xl mx-auto w-full">
             {/* Output Section */}
-            <section className="animate-in fade-in duration-500 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+            <section className="animate-in fade-in duration-500 bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
               <GeneratedSentence
                 tokens={result.tokens}
                 breakdown={result.breakdown}
               />
               {result.warning && (
-                <div className="mt-4 flex gap-2 p-3 bg-red-50 text-red-700 rounded-xl text-xs border border-red-100">
+                <div className="mt-3 flex gap-2 p-3 bg-red-50 text-red-700 rounded-xl text-xs border border-red-100">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <p>{result.warning.messageJa}</p>
                 </div>
@@ -103,7 +103,7 @@ const TrainerPage: React.FC = () => {
             </section>
 
             {/* Controls Section */}
-            <div className="space-y-10 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+            <div className="space-y-8 bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
               <TenseControls
                 selectedTense={tense}
                 onChange={(t) => {
@@ -117,7 +117,7 @@ const TrainerPage: React.FC = () => {
               />
 
               {tense === "Past" && pastUse === "polite" ? (
-                <div className="space-y-4 animate-in zoom-in-95 duration-200">
+                <div className="space-y-3 animate-in zoom-in-95 duration-200">
                   <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Polite Phrasing (Selection)</div>
                   <div className="flex flex-col gap-2">
                     {politePastPhrases.map((phrase, idx) => (
