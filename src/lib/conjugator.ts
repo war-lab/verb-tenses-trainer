@@ -1,192 +1,243 @@
-import { Aspect, ConjugatedResult, FutureMode, SentenceTemplate, Tense, Token, VerbForms } from '../domain/types';
+import {
+  Tense,
+  Aspect,
+  FutureMode,
+  FutureNuance,
+  Person,
+  VerbForms,
+  Token,
+  ConjugationResult,
+  SentenceTemplate,
+} from "./types";
+import { getThirdSingular, getPresentParticiple } from "./morphology";
+import { getWarning } from "./rules";
 
-export function conjugate(
-  template: SentenceTemplate,
-  verbs: Record<string, VerbForms>,
-  tense: Tense,
-  aspect: Aspect,
-  futureMode: FutureMode
-): ConjugatedResult {
-  const verb = verbs[template.verbKey];
-  const { subject } = template;
-  const tokens: Token[] = [];
+export function conjugate(args: {
+  template: SentenceTemplate;
+  verb: VerbForms;
+  tense: Tense;
+  aspect: Aspect;
+  futureMode: FutureMode;
+  futureNuance?: FutureNuance;
+}): ConjugationResult {
+  const { subject, tail } = args.template;
+  const { verb, tense, aspect, futureMode } = args;
 
-  // Subject
-  tokens.push({ text: subject, kind: 'normal' });
+  const tokens: Token[] = [
+    { text: subject, kind: "subject" },
+    { text: " ", kind: "normal" },
+  ];
 
-  // Conjugation Logic
-  const isProgressive = aspect.progressive;
-  const isPerfect = aspect.perfect;
+  let mainVerbToken: Token | null = null;
+  const auxTokens: Token[] = [];
 
-  // Warning check
-  let warning: ConjugatedResult['warning'] = undefined;
-  if (isProgressive) {
-    if (template.restrictions?.progressiveBad || verb.progressiveAllowed === false) {
-      warning = {
-        code: "PROGRESSIVE_UNNATURAL",
-        message: template.restrictions?.note || verb.notes || "この動詞は通常、進行形にしません。"
-      };
-    }
-  }
-
-  // --- Helpers ---
-
-  const push = (text: string, kind: Token['kind'], highlight = false) => {
-    tokens.push({ text, kind, highlight });
-  };
-
-
-  // --- Tense/Aspect State Machine ---
-
-  // 1. Future Mode Helpers
-
-  const isGoingTo = futureMode === 'goingTo';
-  const isProgFuture = futureMode === 'progFuture'; // "I am meeting him"
-  const isAboutTo = futureMode === 'aboutTo';
-
-  // Determine the "Auxiliary Chain"
-  // Order: [Modal/Future] -> [Perfect Have] -> [Progressive Be] -> [Main Verb]
-
-  // === FUTURE ===
-  if (tense === 'Future') {
-    if (isProgFuture) {
-      // Present Progressive for Future
-      // e.g. I am meeting him tomorrow.
-      // Treat this effectively as "Present + Progressive" but conceptually Future.
-      // Usually perfect is NOT combined with this form in standard drills. 
-      // User requested: "progFuture のとき perfect も無効化" -> assumed handled by UI, but if passed here, ignore Perfect?
-      // Let's implement it as Present Progressive construction.
-
-      const beForm = getBeForm(subject, 'Present');
-      push(beForm, 'be', true);
-      push(verb.ing, 'verb', true);
-
-    } else if (isAboutTo) {
-      // Be about to
-      const beForm = getBeForm(subject, 'Present'); // I am about to...
-      push(beForm, 'be', true);
-      push('about to', 'aux', true);
-      push(verb.base, 'verb', true);
-
-    } else if (isGoingTo) {
-      // Be going to
-      const beForm = getBeForm(subject, 'Present');
-      push(beForm, 'be', true);
-      push('going to', 'aux', true);
-
-      // Chain continues: [have] -> [be] -> [verb]
-      if (isPerfect && isProgressive) {
-        push('have', 'have', true);
-        push('been', 'be', true);
-        push(verb.ing, 'verb', true);
-      } else if (isPerfect) {
-        push('have', 'have', true);
-        push(verb.pp, 'verb', true);
-      } else if (isProgressive) {
-        push('be', 'be', true);
-        push(verb.ing, 'verb', true);
-      } else {
-        push(verb.base, 'verb', true);
-      }
-
-    } else {
-      // Will
-      push('will', 'aux', true);
-
-      if (isPerfect && isProgressive) {
-        push('have', 'have', true);
-        push('been', 'be', true);
-        push(verb.ing, 'verb', true);
-      } else if (isPerfect) {
-        push('have', 'have', true);
-        push(verb.pp, 'verb', true);
-      } else if (isProgressive) {
-        push('be', 'be', true);
-        push(verb.ing, 'verb', true);
-      } else {
-        push(verb.base, 'verb', true);
-      }
-    }
-
-  }
-  // === PAST ===
-  else if (tense === 'Past') {
-    if (isPerfect && isProgressive) {
-      push('had', 'have', true);
-      push('been', 'be', true);
-      push(verb.ing, 'verb', true);
-    } else if (isPerfect) {
-      push('had', 'have', true);
-      push(verb.pp, 'verb', true);
-    } else if (isProgressive) {
-      const beVal = getBeForm(subject, 'Past');
-      push(beVal, 'be', true);
-      push(verb.ing, 'verb', true);
-    } else {
-      // Simple Past
-      // Subject agreement checks not usually needed for English main verbs except 'be', 
-      // but our main verbs are action verbs.
-      // BE verb as main verb? 'live' etc. 
-      // If the MAIN VERB is 'be' (not supported in current list except maybe implicitly?), 
-      // we'd need logic. But current verbs list doesn't have 'be'.
-      push(verb.past, 'verb', true);
-    }
-  }
-  // === PRESENT ===
-  else { // Present
-    if (isPerfect && isProgressive) {
-      const haveVal = getHaveForm(subject);
-      push(haveVal, 'have', true);
-      push('been', 'be', true);
-      push(verb.ing, 'verb', true);
-    } else if (isPerfect) {
-      const haveVal = getHaveForm(subject);
-      push(haveVal, 'have', true);
-      push(verb.pp, 'verb', true);
-    } else if (isProgressive) {
-      const beVal = getBeForm(subject, 'Present');
-      push(beVal, 'be', true);
-      push(verb.ing, 'verb', true);
-    } else {
-      // Simple Present
-      // He/She/It rules
-      const isThirdPerson = ['He', 'She', 'It'].includes(subject);
-      if (isThirdPerson) {
-        push(verb.third, 'verb', true);
-      } else {
-        push(verb.base, 'verb', true);
-      }
-    }
-  }
-
-  // Object / Complement
-  if (template.object) push(template.object, 'normal');
-  if (template.complement) push(template.complement, 'normal');
-  if (template.prepPhrase) push(template.prepPhrase, 'normal');
-
-  // Time
-  let timeStr;
-  if (tense === 'Future') timeStr = template.time?.future;
-  else if (tense === 'Past') timeStr = template.time?.past;
-  else timeStr = template.time?.present;
-
-  if (timeStr) push(timeStr, 'normal');
-
-  return { tokens, warning };
-}
-
-function getBeForm(subject: string, tense: 'Present' | 'Past'): string {
-  if (tense === 'Present') {
-    if (subject === 'I') return 'am';
-    if (['He', 'She', 'It'].includes(subject)) return 'is';
-    return 'are';
+  // 1. Determine the path: Future vs Present/Past
+  if (tense === "Future") {
+    handleFuture(subject, verb, aspect, futureMode, auxTokens, (t) => (mainVerbToken = t));
+  } else if (tense === "Present") {
+    handlePresent(subject, verb, aspect, auxTokens, (t) => (mainVerbToken = t));
   } else {
-    if (['I', 'He', 'She', 'It'].includes(subject)) return 'was';
-    return 'were';
+    handlePast(subject, verb, aspect, auxTokens, (t) => (mainVerbToken = t));
+  }
+
+  // 2. Combine all tokens
+  tokens.push(...auxTokens);
+  if (mainVerbToken) {
+    tokens.push(mainVerbToken);
+  }
+  tokens.push({ text: " ", kind: "normal" });
+  tokens.push({ text: tail, kind: "normal" });
+  tokens.push({ text: ".", kind: "punct" });
+
+  const warning = getWarning(verb, aspect, futureMode);
+
+  return {
+    tokens,
+    warning,
+    breakdown: auxTokens.map((t) => t.text.trim()).filter(Boolean),
+  };
+}
+
+function handlePresent(
+  subject: Person,
+  verb: VerbForms,
+  aspect: Aspect,
+  aux: Token[],
+  setMain: (t: Token) => void
+) {
+  const is3rdSingular = ["He", "She", "It"].includes(subject);
+
+  if (!aspect.perfect && !aspect.progressive) {
+    // Simple Present
+    setMain({
+      text: is3rdSingular ? getThirdSingular(verb) : verb.base,
+      kind: "verb",
+      highlight: true,
+    });
+    return;
+  }
+
+  if (aspect.perfect && !aspect.progressive) {
+    // Present Perfect
+    aux.push({ text: is3rdSingular ? "has" : "have", kind: "have", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    setMain({ text: verb.pastParticiple, kind: "verb", highlight: true });
+    return;
+  }
+
+  if (!aspect.perfect && aspect.progressive) {
+    // Present Progressive
+    aux.push({ text: getBe(subject, "Present"), kind: "be", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
+    return;
+  }
+
+  if (aspect.perfect && aspect.progressive) {
+    // Present Perfect Progressive
+    aux.push({ text: is3rdSingular ? "has" : "have", kind: "have", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    aux.push({ text: "been", kind: "be", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
   }
 }
 
-function getHaveForm(subject: string): string {
-  if (['He', 'She', 'It'].includes(subject)) return 'has';
-  return 'have';
+function handlePast(
+  subject: Person,
+  verb: VerbForms,
+  aspect: Aspect,
+  aux: Token[],
+  setMain: (t: Token) => void
+) {
+  if (!aspect.perfect && !aspect.progressive) {
+    // Simple Past
+    setMain({ text: verb.past, kind: "verb", highlight: true });
+    return;
+  }
+
+  if (aspect.perfect && !aspect.progressive) {
+    // Past Perfect
+    aux.push({ text: "had", kind: "have", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    setMain({ text: verb.pastParticiple, kind: "verb", highlight: true });
+    return;
+  }
+
+  if (!aspect.perfect && aspect.progressive) {
+    // Past Progressive
+    aux.push({ text: getBe(subject, "Past"), kind: "be", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
+    return;
+  }
+
+  if (aspect.perfect && aspect.progressive) {
+    // Past Perfect Progressive
+    aux.push({ text: "had", kind: "have", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    aux.push({ text: "been", kind: "be", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
+  }
+}
+
+function handleFuture(
+  subject: Person,
+  verb: VerbForms,
+  aspect: Aspect,
+  mode: FutureMode,
+  aux: Token[],
+  setMain: (t: Token) => void
+) {
+  // Common Future modes: will, goingTo, progFuture, aboutTo
+
+  if (mode === "will") {
+    aux.push({ text: "will", kind: "aux", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+
+    if (aspect.perfect && aspect.progressive) {
+      aux.push({ text: "have", kind: "have", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      aux.push({ text: "been", kind: "be", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
+    } else if (aspect.perfect) {
+      aux.push({ text: "have", kind: "have", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      setMain({ text: verb.pastParticiple, kind: "verb", highlight: true });
+    } else if (aspect.progressive) {
+      aux.push({ text: "be", kind: "be", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
+    } else {
+      setMain({ text: verb.base, kind: "verb" }); // Highlight usually not needed for plain base verb after will
+    }
+    return;
+  }
+
+  if (mode === "goingTo") {
+    aux.push({ text: getBe(subject, "Present"), kind: "be", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    aux.push({ text: "going", kind: "aux", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    aux.push({ text: "to", kind: "aux", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+
+    // be going to + [Aspect]
+    if (aspect.perfect && aspect.progressive) {
+      aux.push({ text: "have", kind: "have", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      aux.push({ text: "been", kind: "be", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
+    } else if (aspect.perfect) {
+      aux.push({ text: "have", kind: "have", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      setMain({ text: verb.pastParticiple, kind: "verb", highlight: true });
+    } else if (aspect.progressive) {
+      aux.push({ text: "be", kind: "be", highlight: true });
+      aux.push({ text: " ", kind: "normal" });
+      setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
+    } else {
+      setMain({ text: verb.base, kind: "verb" });
+    }
+    return;
+  }
+
+  if (mode === "progFuture") {
+    // Simply Present Progressive
+    handlePresent(subject, verb, { perfect: false, progressive: true }, aux, setMain);
+    return;
+  }
+
+  if (mode === "aboutTo") {
+    aux.push({ text: getBe(subject, "Present"), kind: "be", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    aux.push({ text: "about", kind: "aux", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    aux.push({ text: "to", kind: "aux", highlight: true });
+    aux.push({ text: " ", kind: "normal" });
+    setMain({ text: verb.base, kind: "verb" });
+  }
+}
+
+function getBe(person: Person, tense: "Present" | "Past"): string {
+  if (tense === "Present") {
+    switch (person) {
+      case "I": return "am";
+      case "He":
+      case "She":
+      case "It": return "is";
+      default: return "are";
+    }
+  } else {
+    switch (person) {
+      case "I":
+      case "He":
+      case "She":
+      case "It": return "was";
+      default: return "were";
+    }
+  }
 }
