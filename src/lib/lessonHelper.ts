@@ -10,42 +10,57 @@ export function getEffectiveLessonMeta(
   const base = template.lesson;
   let overrides: Partial<LessonMeta> = {};
 
-  // 1. Base Tense Overrides (e.g., specific notes for "Past" vs default "Present")
-  if (template.tenseOverrides?.[tense]) {
-    overrides = { ...overrides, ...template.tenseOverrides[tense] };
-  }
+  // 1. Tense-level lookup
+  const tenseOverride = template.tenseOverrides?.[tense];
+  if (tenseOverride) {
+    const { aspectOverrides: _, ...meta } = tenseOverride;
+    overrides = { ...overrides, ...meta };
 
-  // 2. Aspect Overrides (Perfect / Progressive / Both)
-  if (aspect.perfect && aspect.progressive && template.aspectOverrides?.perfectProgressive) {
-    overrides = { ...overrides, ...template.aspectOverrides.perfectProgressive };
-  } else {
-    if (aspect.perfect && template.aspectOverrides?.perfect) {
-      overrides = { ...overrides, ...template.aspectOverrides.perfect };
-    }
-    if (aspect.progressive && template.aspectOverrides?.progressive) {
-      overrides = { ...overrides, ...template.aspectOverrides.progressive };
-    }
-  }
-
-  // 3. Future specifics (Now allowed for "Past" too for Future-in-the-Past)
-  if (tense === "Future" || tense === "Past") {
-    // Check mode overrides (goingTo, aboutTo, progFuture)
-    if (template.modeOverrides?.[futureMode]) {
-      overrides = { ...overrides, ...template.modeOverrides[futureMode] };
-    }
-    // Check will nuances (only if mode is will)
-    if (futureMode === "will" && futureNuance) {
-      if (tense === "Past" && template.pastWillNuances?.[futureNuance]) {
-        overrides = { ...overrides, ...template.pastWillNuances[futureNuance] };
-      } else if (template.willNuances?.[futureNuance]) {
-        overrides = { ...overrides, ...template.willNuances[futureNuance] };
+    // 2. Nested Aspect lookup within Tense
+    if (aspect.perfect && aspect.progressive && tenseOverride.aspectOverrides?.perfectProgressive) {
+      overrides = { ...overrides, ...tenseOverride.aspectOverrides.perfectProgressive };
+    } else {
+      if (aspect.perfect && tenseOverride.aspectOverrides?.perfect) {
+        overrides = { ...overrides, ...tenseOverride.aspectOverrides.perfect };
+      }
+      if (aspect.progressive && tenseOverride.aspectOverrides?.progressive) {
+        overrides = { ...overrides, ...tenseOverride.aspectOverrides.progressive };
       }
     }
   }
 
+  // 3. Fallback to Global Aspect or Future Mode if no specialized tense-aspect override was found for those props
+  // (We use a simple merge here, but priority is given to the sequence)
+  if (!overrides.situationJa || !overrides.jpNatural) {
+    if (aspect.perfect && aspect.progressive && template.aspectOverrides?.perfectProgressive) {
+      overrides = { ...template.aspectOverrides.perfectProgressive, ...overrides };
+    } else {
+      if (aspect.perfect && template.aspectOverrides?.perfect) {
+        overrides = { ...template.aspectOverrides.perfect, ...overrides };
+      }
+      if (aspect.progressive && template.aspectOverrides?.progressive) {
+        overrides = { ...template.aspectOverrides.progressive, ...overrides };
+      }
+    }
+  }
+
+  // 4. Future specifics
+  if (tense === "Future") {
+    // Check mode overrides (goingTo, aboutTo, progFuture)
+    if (template.modeOverrides?.[futureMode]) {
+      overrides = { ...overrides, ...template.modeOverrides[futureMode] };
+    }
+    // Check will nuances
+    if (futureMode === "will" && futureNuance && template.willNuances?.[futureNuance]) {
+      overrides = { ...overrides, ...template.willNuances[futureNuance] };
+    }
+  }
+
+  // FINAL MERGE: REPLACE behavior for pedagogical notes (avoid accidental "Habit" notes in Past)
   return {
     ...base,
     ...overrides,
-    whyJa: overrides.whyJa ? [...base.whyJa, ...overrides.whyJa] : base.whyJa,
+    // If overrides provide whyJa, we REPLACE the base whyJa to ensure focus
+    whyJa: overrides.whyJa ? overrides.whyJa : base.whyJa,
   };
 }

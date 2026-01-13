@@ -93,6 +93,14 @@ export type LessonMeta = {
   contrast?: MiniContrast;
 };
 
+export type TenseOverride = Partial<LessonMeta> & {
+  aspectOverrides?: Partial<{
+    perfect: Partial<LessonMeta>;
+    progressive: Partial<LessonMeta>;
+    perfectProgressive: Partial<LessonMeta>;
+  }>;
+};
+
 export type SentenceTemplate = {
   id: string;
   titleJa: string;
@@ -109,7 +117,7 @@ export type SentenceTemplate = {
     progressive: Partial<LessonMeta>;
     perfectProgressive: Partial<LessonMeta>;
   }>;
-  tenseOverrides?: Partial<Record<Tense, Partial<LessonMeta>>>;
+  tenseOverrides?: Partial<Record<Tense, TenseOverride>>;
   restrictions?: {
     progressiveBad?: boolean;
     noteJa?: string;
