@@ -67,7 +67,7 @@ const TrainerPage: React.FC = () => {
       };
     }
     return getEffectiveLessonMeta(currentTemplate, tense, aspect, futureMode, futureNuance);
-  }, [currentTemplate, tense, futureMode, futureNuance, pastUse, politePhraseIndex]);
+  }, [currentTemplate, tense, aspect, futureMode, futureNuance, pastUse, politePhraseIndex]);
 
   return (
     <div className="min-h-screen bg-slate-50 pb-32 lg:pb-8">
