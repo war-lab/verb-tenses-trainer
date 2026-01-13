@@ -1,51 +1,27 @@
-import { useState } from 'react';
-import { sentences } from '../data/sentences';
-import { verbs } from '../data/verbs';
-import { conjugate } from '../lib/conjugator';
-import { SentencePicker } from '../components/SentencePicker';
-import { GeneratedSentence } from '../components/GeneratedSentence';
-import { Aspect, FutureMode, Tense } from '../domain/types';
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
+import { Layers } from 'lucide-react';
 
-export function ComparePage() {
-  const [sentenceId, setSentenceId] = useState(sentences[0].id);
-  const sentenceTemplate = sentences.find(s => s.id === sentenceId) || sentences[0];
-
-  // Fixed Comparison for Future forms (as per requirements)
-  // "will vs going to vs progFuture"
-
-  const forms: Array<{ label: string, tense: Tense, mode: FutureMode, aspect: Aspect }> = [
-    { label: 'will (意思/予測)', tense: 'Future', mode: 'will', aspect: { perfect: false, progressive: false } },
-    { label: 'be going to (計画)', tense: 'Future', mode: 'goingTo', aspect: { perfect: false, progressive: false } },
-    { label: 'Present Progressive (確定予定)', tense: 'Future', mode: 'progFuture', aspect: { perfect: false, progressive: false } },
-  ];
-
+export const ComparePage: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Compare Future Forms</h2>
-
-      <div className="card mb-8">
-        <SentencePicker
-          selectedId={sentenceId}
-          onSelect={(s) => setSentenceId(s.id)}
-        />
-      </div>
-
-      <div className="grid gap-6">
-        {forms.map((form) => {
-          // Filter out if restricted
-          if (sentenceTemplate.allowedFutureModes && !sentenceTemplate.allowedFutureModes.includes(form.mode)) {
-            return null;
-          }
-
-          const result = conjugate(sentenceTemplate, verbs, form.tense, form.aspect, form.mode);
-          return (
-            <div key={form.label} className="card border-l-8 border-l-blue-500">
-              <div className="text-xs font-bold text-gray-500 uppercase mb-2">{form.label}</div>
-              <GeneratedSentence result={result} />
-            </div>
-          );
-        })}
-      </div>
+    <div className="space-y-6">
+      <Card className="border-indigo-100 bg-indigo-50/30">
+        <CardHeader>
+          <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center mb-4 text-indigo-600">
+            <Layers className="w-6 h-6" />
+          </div>
+          <CardTitle>Compare Mode</CardTitle>
+          <CardDescription>
+            似た表現を並べて、そのニュアンスの違いを深く学びましょう（近日公開）。
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-slate-600">
+            現在は Trainer モード内での「対比（Compare）」機能を優先的に実装しています。
+            独立した比較モードは、より高度な対比学習のために準備中です。
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
-}
+};

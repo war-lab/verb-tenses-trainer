@@ -1,4 +1,4 @@
-import { Token } from "./lib/types";
+import { Token } from "../lib/types";
 
 export type PolitePastPhrase = {
   id: string;

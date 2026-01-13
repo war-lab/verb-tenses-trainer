@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { TrainerPage } from './pages/TrainerPage';
+import TrainerPage from './pages/TrainerPage';
 import { ComparePage } from './pages/ComparePage';
 import { FutureGuidePage } from './pages/FutureGuidePage';
 import { Header } from './components/Header';

@@ -1,89 +1,177 @@
-import { useState, useMemo } from 'react';
-import { sentences } from '../data/sentences';
-import { verbs } from '../data/verbs';
-import { Aspect, FutureMode, Tense } from '../domain/types';
-import { conjugate } from '../lib/conjugator';
-import { SentencePicker } from '../components/SentencePicker';
-import { TenseControls } from '../components/TenseControls';
-import { GeneratedSentence } from '../components/GeneratedSentence';
-import { NuanceNote } from '../components/NuanceNote';
+import React, { useState, useMemo } from "react";
+import { sentences } from "../data/sentences";
+import { verbs } from "../data/verbs";
+import { politePastPhrases } from "../data/politePastPhrases";
+import { Tense, Aspect, FutureMode, FutureNuance, ConjugationResult } from "../lib/types";
+import { conjugate } from "../lib/conjugator";
+import { getEffectiveLessonMeta } from "../lib/lessonHelper";
 
-import { StateSummary } from '../components/StateSummary';
-import { SectionHeader } from '../components/ui/SectionHeader';
-import { Lightbulb } from 'lucide-react';
+import { SentencePicker } from "../components/SentencePicker";
+import { GeneratedSentence } from "../components/GeneratedSentence";
+import { TenseControls } from "../components/TenseControls";
+import { AspectControls } from "../components/AspectControls";
+import { FutureControls } from "../components/FutureControls";
+import { ResultBar } from "../components/ResultBar";
+import { LessonCard } from "../components/LessonCard";
+import { Button } from "../components/ui/Button";
+import { AlertCircle } from "lucide-react";
 
-export function TrainerPage() {
-  const [sentenceId, setSentenceId] = useState(sentences[0].id);
-  const [tense, setTense] = useState<Tense>('Present');
+const TrainerPage: React.FC = () => {
+  // Navigation State
+  const [templateIndex, setTemplateIndex] = useState(0);
+
+  // Grammar State
+  const [tense, setTense] = useState<Tense>("Present");
   const [aspect, setAspect] = useState<Aspect>({ perfect: false, progressive: false });
-  const [futureMode, setFutureMode] = useState<FutureMode>('will');
+  const [futureMode, setFutureMode] = useState<FutureMode>("will");
+  const [futureNuance, setFutureNuance] = useState<FutureNuance>("prediction");
+  const [pastUse, setPastUse] = useState<"time" | "polite">("time");
+  const [politePhraseIndex, setPolitePhraseIndex] = useState(0);
 
-  const sentenceTemplate = useMemo(() =>
-    sentences.find(s => s.id === sentenceId) || sentences[0]
-    , [sentenceId]);
+  // UI State
+  const [isLessonOpen, setIsLessonOpen] = useState(false);
 
-  const result = useMemo(() => {
-    return conjugate(sentenceTemplate, verbs, tense, aspect, futureMode);
-  }, [sentenceTemplate, tense, aspect, futureMode]);
+  const currentTemplate = sentences[templateIndex];
+  const currentVerb = verbs.find(v => v.id === currentTemplate.verbId) || verbs[0];
 
-  const currentNuance = useMemo(() => {
-    const n = sentenceTemplate.nuance;
-    // Aspect takes precedence over Simple Tense nuances in this MVP mapping
-    if (aspect.perfect && aspect.progressive) return n.perfectProgressive;
-    if (aspect.perfect) return n.perfect;
-    if (aspect.progressive) return n.progressive;
+  // Logic: Conjugation or Polite Phrase
+  const result: ConjugationResult = useMemo(() => {
+    if (tense === "Past" && pastUse === "polite") {
+      const phrase = politePastPhrases[politePhraseIndex];
+      return {
+        tokens: phrase.tokens,
+        breakdown: ["Distance Past", "Polite"],
+      };
+    }
 
-    // Simple tenses
-    if (tense === 'Past') return n.simplePast;
-    if (tense === 'Future') return n.simpleFuture;
-    return n.simplePresent;
-  }, [sentenceTemplate, tense, aspect]);
+    return conjugate({
+      template: currentTemplate,
+      verb: currentVerb,
+      tense,
+      aspect,
+      futureMode,
+      futureNuance,
+    });
+  }, [currentTemplate, currentVerb, tense, aspect, futureMode, futureNuance, pastUse, politePhraseIndex]);
+
+  const effectiveMeta = useMemo(() => {
+    if (tense === "Past" && pastUse === "polite") {
+      const phrase = politePastPhrases[politePhraseIndex];
+      return {
+        situationJa: phrase.situationJa,
+        jpLiteral: phrase.titleJa, // For polite phrases, literal is less important
+        jpNatural: phrase.titleJa,
+        usageLabel: "Polite:Distance" as const,
+        whyJa: ["今の意向をあえて過去形で言うことで、心理的な距離を置き、丁寧さを表現します。"],
+      };
+    }
+    return getEffectiveLessonMeta(currentTemplate, tense, futureMode, futureNuance);
+  }, [currentTemplate, tense, futureMode, futureNuance, pastUse, politePhraseIndex]);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 pb-32">
+      <SentencePicker
+        sentences={sentences}
+        currentIndex={templateIndex}
+        onSelect={(idx) => {
+          setTemplateIndex(idx);
+          // Reset aspects if switching to a restricted template
+          const newTemplate = sentences[idx];
+          if (!newTemplate.allowedFutureModes?.includes(futureMode)) {
+            setFutureMode(newTemplate.allowedFutureModes?.[0] || "will");
+          }
+        }}
+      />
 
-
-      <main className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-8">
-
-        {/* Left Column: Inputs */}
-        <div className="md:col-span-7 space-y-8">
-          <SentencePicker
-            selectedId={sentenceId}
-            onSelect={(s) => setSentenceId(s.id)}
+      <main className="max-w-md mx-auto p-4 space-y-8">
+        {/* Output Section */}
+        <section className="animate-in fade-in duration-500">
+          <GeneratedSentence
+            tokens={result.tokens}
+            breakdown={result.breakdown}
           />
+          {result.warning && (
+            <div className="mt-4 flex gap-2 p-3 bg-red-50 text-red-700 rounded-xl text-xs border border-red-100">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <p>{result.warning.messageJa}</p>
+            </div>
+          )}
+        </section>
 
-          <hr className="border-slate-200 dark:border-slate-800" />
-
+        {/* Controls Section */}
+        <div className="space-y-10">
           <TenseControls
-            tense={tense}
-            aspect={aspect}
-            futureMode={futureMode}
-            onChangeTense={setTense}
-            onChangeAspect={setAspect}
-            onChangeFutureMode={setFutureMode}
-            allowedFutureModes={sentenceTemplate.allowedFutureModes}
+            selectedTense={tense}
+            onChange={(t) => {
+              setTense(t);
+              if (t === "Future" && futureMode === "progFuture") {
+                setAspect({ perfect: false, progressive: true });
+              }
+            }}
+            pastUse={pastUse}
+            onPastUseChange={setPastUse}
           />
-        </div>
 
-        {/* Right Column: Outputs (Sticky) */}
-        <div className="md:col-span-5">
-          <div className="md:sticky md:top-24 space-y-6">
-            <div className="hidden md:block">
-              <SectionHeader title="Output Preview" description="生成結果" />
+          {tense === "Past" && pastUse === "polite" ? (
+            <div className="space-y-4 animate-in zoom-in-95 duration-200">
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Polite Phrasing (Selection)</div>
+              <div className="flex flex-col gap-2">
+                {politePastPhrases.map((phrase, idx) => (
+                  <Button
+                    key={phrase.id}
+                    variant={politePhraseIndex === idx ? "premium" : "outline"}
+                    onClick={() => setPolitePhraseIndex(idx)}
+                    className="justify-start text-left h-auto py-3 px-4"
+                  >
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-sm font-bold">{phrase.titleJa}</span>
+                    </div>
+                  </Button>
+                ))}
+              </div>
             </div>
+          ) : (
+            <>
+              <AspectControls
+                tense={tense}
+                futureMode={futureMode}
+                aspect={aspect}
+                onChange={setAspect}
+              />
 
-            <StateSummary tense={tense} aspect={aspect} />
-
-            <GeneratedSentence result={result} />
-
-            <div className="mt-8">
-              <SectionHeader title="Nuance Note" icon={Lightbulb} className="mb-4" />
-              <NuanceNote nuance={currentNuance} />
-            </div>
-          </div>
+              {tense === "Future" && (
+                <FutureControls
+                  template={currentTemplate}
+                  selectedMode={futureMode}
+                  onModeChange={(m) => {
+                    setFutureMode(m);
+                    if (m === "progFuture") {
+                      setAspect({ perfect: false, progressive: true });
+                    } else if (m === "aboutTo") {
+                      setAspect({ perfect: false, progressive: false });
+                    }
+                  }}
+                  selectedNuance={futureNuance}
+                  onNuanceChange={setFutureNuance}
+                />
+              )}
+            </>
+          )}
         </div>
-
       </main>
+
+      <ResultBar
+        onShowLesson={() => setIsLessonOpen(true)}
+        hasWarning={!!result.warning}
+      />
+
+      <LessonCard
+        isOpen={isLessonOpen}
+        onOpenChange={setIsLessonOpen}
+        meta={effectiveMeta}
+      />
     </div>
   );
-}
+};
+
+export default TrainerPage;

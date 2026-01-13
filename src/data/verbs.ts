@@ -1,4 +1,4 @@
-import { VerbForms } from "./lib/types";
+import { VerbForms } from "../lib/types";
 
 export const verbs: VerbForms[] = [
   {
