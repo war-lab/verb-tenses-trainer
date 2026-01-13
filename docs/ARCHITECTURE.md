@@ -9,7 +9,36 @@ This application is designed NOT just to generate correct English sentences, but
   - `be going to` vs `will` differentiation.
   - `progFuture` (Fixed plans) forces progressive aspect.
   - `aboutTo` (Immediate future) restricts complex aspects.
-- **Polite Past (Distance)**: A dedicated mode for "psychological distance" in English, teaching that the past tense can refer to the present for politeness.
+## Maintenance & Future Expansion (Developer Guide)
+
+### Adding New Verbs
+1. Add the verb definition to `src/data/verbs.ts`.
+2. Define the base, past, and past participle forms.
+3. Set `progressiveAllowed: false` for state verbs (e.g., *know*, *like*).
+
+### Adding New Sentence Templates
+1. Add a new object to `src/data/sentences.ts`.
+2. **Pedagogical Requirement**: Every template *must* include:
+   - `jpLiteral`: A structure-preserving translation (e.g., "私はりんごを食べる").
+   - `jpNatural`: How a native speaker would actually say it.
+   - `whyJa`: A list of reasons for why this specific form is used.
+3. **Future Nuances**: Use `willNuances` to provide context-specific explanations for `will` (Decision, Offer, Promise, Prediction).
+
+### Overriding Logic
+Use `modeOverrides` or `willNuances` in `SentenceTemplate` to override the default `LessonMeta`. This is useful when a specific tense carries a special meaning for a particular context (e.g., using Progressive for a planned meeting).
+
+### Design Philosophy for Antigravity (Future Assistant)
+> [!IMPORTANT]
+> **Learning 1st**: UI updates must prioritize pedagogy. If a layout change makes an explanation harder to read, it's a regression.
+> **Compactness**: The UI is designed to minimize vertical scrolling on mobile so the "Generate" and "Control" sections remain visible simultaneously.
+> **Basename Routing**: The app is configured for GitHub Pages with `base: "/verb-tenses-trainer/"`. Ensure `BrowserRouter` always uses this basename.
+
+---
+
+## Technical Debt & Roadmap
+- [ ] **Quiz Mode**: Implement a mode where the English sentence is hidden until a choice is made.
+- [ ] **Voice Synthesis**: Integrate browser Web Speech API for auditory learning.
+- [ ] **Dark Mode Refinement**: Ensure custom controls like the `Tense` toggle have high-contrast active states in dark mode.
 - **Usage Labels**: Standardized badges (e.g., `[Perfect:Result]`) to help students categorize concepts.
 - **Split Compare**: Side-by-side comparison of curated contrasts (e.g., Simple Present vs Present Progressive).
 

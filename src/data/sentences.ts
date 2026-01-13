@@ -23,6 +23,26 @@ export const sentences: SentenceTemplate[] = [
         whyJa: ["客観的な予測や推測としてwillを使います"],
       }
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさにりんごを食べている最中のとき",
+        jpNatural: "りんごを食べています",
+        usageLabel: "Progressive:InProgress",
+        whyJa: ["be動詞 + ing で『今〜している』という進行を表します"],
+      },
+      perfect: {
+        situationJa: "「さっき食べちゃった」という結果や「食べたことがある」という経験を言うとき",
+        jpNatural: "りんごを食べてしまいました（もうないです）",
+        usageLabel: "Perfect:Result",
+        whyJa: ["have + 過去分詞で『すでに〜した』という完了・結果を表します"],
+      },
+      perfectProgressive: {
+        situationJa: "（さっきからずっと）りんごを食べ続けている状態を強調するとき",
+        jpNatural: "ずっとりんごを食べ続けています",
+        usageLabel: "Perfect:Continuation",
+        whyJa: ["have been + ing で『（過去から今まで）ずっと〜し続けている』という継続を表します"],
+      }
+    },
     lesson: {
       situationJa: "食事の習慣や、目の前にあるりんごについて話すとき",
       jpLiteral: "私はりんごを食べる",
@@ -69,6 +89,18 @@ export const sentences: SentenceTemplate[] = [
         whyJa: ["be going to は目に見える根拠がある時に使います"],
       }
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "まさに今、雨が降っている最中のとき",
+        jpNatural: "（今）雨が降っています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「雨が降った（ばかり）」という最近の出来事や、「（ずっと）降っていた」という状態を指すとき",
+        jpNatural: "雨が降りました / （今まで）降っていました",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "天候について話すとき",
       jpLiteral: "それは今日雨が降る",
@@ -104,6 +136,24 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "すでに予定として決まっているとき",
         jpNatural: "彼らは（予定では）学校に行くことになっています",
         whyJa: ["現在進行形は確定した未来の予定を表します"],
+      }
+    },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、学校に向かっている最中（通学中）のとき",
+        jpNatural: "彼らは（今）学校に向かっています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう学校に行ってしまったよ（ここにはいないよ）」という結果を言うとき",
+        jpNatural: "彼らは（もう）学校に行ってしまいました",
+        usageLabel: "Perfect:Result",
+        whyJa: ["have gone to は『〜へ行ってしまった（結果、今はここにいない）』を表します"],
+      },
+      perfectProgressive: {
+        situationJa: "休みなく学校に通い続けている状態や、その日の朝からずっと移動し続けているとき",
+        jpNatural: "（ずっと）学校に行き続けています",
+        usageLabel: "Perfect:Continuation",
       }
     },
     lesson: {
@@ -159,6 +209,18 @@ export const sentences: SentenceTemplate[] = [
         whyJa: ["be about to は直後の未来（秒読み）を表します"],
       }
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "まさに今、シャッターを切ろうとしているところ、あるいは撮影中のとき",
+        jpNatural: "（今）写真を撮っています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう撮ったよ」という完了や、「撮ったことがある」という経験を言うとき",
+        jpNatural: "写真を撮り終えました / 撮ったことがあります",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "その場の意思や直前の行動",
       jpLiteral: "私は写真を撮る",
@@ -181,6 +243,23 @@ export const sentences: SentenceTemplate[] = [
         jpNatural: "彼女は公園で本を読んでいるでしょう",
         usageLabel: "Future:Will:Prediction",
       },
+    },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさに公園で本を広げて読んでいる最中のとき",
+        jpNatural: "彼女は本を読んでいます",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「さっき読み終わった（読破した）」という完了や、「読したことがある」という経験を言うとき",
+        jpNatural: "彼女はその本を読み終えました / 読んだことがあります",
+        usageLabel: "Perfect:Result",
+      },
+      perfectProgressive: {
+        situationJa: "数時間前からずっと、今もなお本を読み続けているとき",
+        jpNatural: "彼女はずっと本を読み続けています",
+        usageLabel: "Perfect:Continuation",
+      }
     },
     lesson: {
       situationJa: "日常の習慣や、現在進行中の動作について",
@@ -220,6 +299,18 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Future:Will:Promise",
       },
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさにキッチンで料理をしている最中のとき",
+        jpNatural: "彼女は夕食を作っています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう作り終えたよ」という完了や、「何度も作ったことがある」という経験を言うとき",
+        jpNatural: "彼女は夕食を作り終えました / 作ったことがあります",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "彼女の毎日の仕事や将来の予定",
       jpLiteral: "彼女は私たちのために夕食を作る",
@@ -236,6 +327,18 @@ export const sentences: SentenceTemplate[] = [
     tail: "very fast",
     allowedFutureModes: ["will", "goingTo"],
     allowedWillNuances: ["prediction"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、猛スピードで走っている最中のとき",
+        jpNatural: "彼はとても速く走っています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「さっきまで走っていた」という継続や、「あんなに速く走ったことがある」という経験を言うとき",
+        jpNatural: "彼は（今まで）とても速く走っていました / 走ったことがあります",
+        usageLabel: "Perfect:Continuation",
+      }
+    },
     lesson: {
       situationJa: "彼の能力や習慣",
       jpLiteral: "彼はとても早く走る",
@@ -259,6 +362,18 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Future:Will:Decision",
       },
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今この瞬間、まさに机に向かって勉強しているとき",
+        jpNatural: "私たちは英語を勉強しています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう今日の分は終わったよ」という完了や、「ずっと勉強してきた」という継続を言うとき",
+        jpNatural: "私たちは英語を勉強し終えました / （ずっと）勉強してきました",
+        usageLabel: "Perfect:Continuation",
+      }
+    },
     lesson: {
       situationJa: "私たちの学習習慣",
       jpLiteral: "私たちは毎日英語を勉強する",
@@ -279,6 +394,18 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "今度の日曜日にテニスをする約束が既にあるとき",
         jpNatural: "（今度の日曜は）テニスをすることになっています",
       },
+    },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさにコートでラリーをしている真っ最中のとき",
+        jpNatural: "あなたはテニスをしています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「さっきまでやっていた」という継続や、「テニスをしたことがある」という経験を言うとき",
+        jpNatural: "あなたは（さっきまで）テニスをしていました / したことがあります",
+        usageLabel: "Perfect:Experience",
+      }
     },
     lesson: {
       situationJa: "日曜日ごとの習慣",
@@ -302,6 +429,18 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Future:Will:Offer",
       },
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさに庭や洗車場で車を洗っている最中のとき",
+        jpNatural: "彼は（今）車を洗っています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう車を洗い終えたよ」という完了を言うとき",
+        jpNatural: "彼は車を洗い終えました",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "彼の週末の習慣など",
       jpLiteral: "彼は車を洗う",
@@ -317,6 +456,18 @@ export const sentences: SentenceTemplate[] = [
     verbId: "watch",
     tail: "television after dinner",
     allowedFutureModes: ["will", "goingTo"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさにリビングでテレビを見ている最中のとき",
+        jpNatural: "彼らはテレビを見ています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「さっきまで見ていた」という継続や、「あの番組を見たことがある」という経験を言うとき",
+        jpNatural: "彼らは（さっきまで）テレビを見ていました / 見たことがあります",
+        usageLabel: "Perfect:Experience",
+      }
+    },
     lesson: {
       situationJa: "彼らの典型的な習慣",
       jpLiteral: "彼らは夕食後にテレビを見る",
@@ -332,6 +483,18 @@ export const sentences: SentenceTemplate[] = [
     verbId: "write",
     tail: "a letter to my friend",
     allowedFutureModes: ["will", "goingTo", "aboutTo"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさにペンを握って手紙を書いている最中のとき",
+        jpNatural: "私は手紙を書いています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「さっき書き上げた」という完了や、「ずっと書いてきた」という継続を言うとき",
+        jpNatural: "私は手紙を書き終えました / （ずっと）手紙を書いてきました",
+        usageLabel: "Perfect:Continuation",
+      }
+    },
     lesson: {
       situationJa: "動作の事実や意思",
       jpLiteral: "私は友人へ手紙を書く",
@@ -347,6 +510,18 @@ export const sentences: SentenceTemplate[] = [
     verbId: "sing",
     tail: "a beautiful song",
     allowedFutureModes: ["will", "goingTo"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさにステージや何かの場所で歌っている最中のとき",
+        jpNatural: "彼女は歌を歌っています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「さっき歌い終えた」という完了や、「その歌を歌ったことがある」という経験を言うとき",
+        jpNatural: "彼女は歌い終えました / 歌ったことがあります",
+        usageLabel: "Perfect:Experience",
+      }
+    },
     lesson: {
       situationJa: "彼女の才能や披露",
       jpLiteral: "彼女は美しい歌を歌う",
@@ -362,6 +537,18 @@ export const sentences: SentenceTemplate[] = [
     verbId: "drink",
     tail: "coffee every morning",
     allowedFutureModes: ["will", "goingTo"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今この瞬間、まさにコーヒーをすすっている最中のとき",
+        jpNatural: "彼はコーヒーを飲んでいます",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう飲んじゃった」という完了や、「コーヒーを飲んだことがある（経験）」を言うとき",
+        jpNatural: "彼はコーヒーを飲み終えました",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "毎朝の習慣",
       jpLiteral: "彼は毎朝コーヒーを飲む",
@@ -383,6 +570,23 @@ export const sentences: SentenceTemplate[] = [
         jpNatural: "（ちゃんと）部屋を掃除します",
         usageLabel: "Future:Will:Promise",
       },
+    },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさに掃除機をかけたり片付けをしたりしている最中のとき",
+        jpNatural: "私は部屋を掃除しています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もうピカピカにしたよ」という完了を言うとき",
+        jpNatural: "部屋を掃除し終えました（今は綺麗です）",
+        usageLabel: "Perfect:Result",
+      },
+      perfectProgressive: {
+        situationJa: "さっきからずっと、休みなく掃除をし続けているとき",
+        jpNatural: "（ずっと）掃除をし続けています",
+        usageLabel: "Perfect:Continuation",
+      }
     },
     lesson: {
       situationJa: "これからの予定や事実",
@@ -412,6 +616,18 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Future:Will:Offer",
       },
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "まさに今、窓に手をかけて開けている最中のとき",
+        jpNatural: "窓を開けているところです",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう開けたよ（今は開いているよ）」という結果を言うとき",
+        jpNatural: "窓を開けました（今は開いています）",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "その場の動作",
       jpLiteral: "窓を開ける",
@@ -427,6 +643,18 @@ export const sentences: SentenceTemplate[] = [
     verbId: "close",
     tail: "the door",
     allowedFutureModes: ["will", "goingTo", "aboutTo"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "まさに今、ドアを閉めているところ、または閉まる瞬間のとき",
+        jpNatural: "ドアを閉めています / ドアが閉まるところです",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう閉めちゃった」という結果を言うとき",
+        jpNatural: "ドアを閉め終えました（今は閉まっています）",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "動作の事実",
       jpLiteral: "彼はドアを閉める",
@@ -442,6 +670,18 @@ export const sentences: SentenceTemplate[] = [
     verbId: "listen",
     tail: "to music",
     allowedFutureModes: ["will", "goingTo"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさにイヤホンなどで音楽を聴いている最中のとき",
+        jpNatural: "あなたは音楽を聴いています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「さっきまで聴いていた」という継続や、「その曲を聴いたことがある」という経験を言うとき",
+        jpNatural: "あなたは音楽を（さっきまで）聴いていました / 聴いたことがあります",
+        usageLabel: "Perfect:Experience",
+      }
+    },
     lesson: {
       situationJa: "趣味や現在の動作",
       jpLiteral: "あなたは音楽を聴く",
@@ -465,6 +705,18 @@ export const sentences: SentenceTemplate[] = [
         whyJa: ["現在進行形は個人的な手配・準備済みの予定に最適です"],
       },
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "まさに今、東京を観光して回っている最中のとき",
+        jpNatural: "私たちは東京を訪れています（今そこにいます）",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「以前東京に行ったことがある」という経験や、「すでに到着した」という完了を言うとき",
+        jpNatural: "私たちは東京を訪れたことがあります / （もう）東京に着きました",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "将来の予定",
       jpLiteral: "私たちは来月東京を訪れる",
@@ -487,6 +739,18 @@ export const sentences: SentenceTemplate[] = [
         whyJa: ["以前から決めていた「意図」は be going to が一般的です"],
       },
     },
+    aspectOverrides: {
+      progressive: {
+        situationJa: "まさに今、ディーラーで契約書にサインしているような状況のとき",
+        jpNatural: "（今）新しい車を買っています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう買っちゃった」という結果や、「高級車を買ったことがある」という経験を言うとき",
+        jpNatural: "彼らは新しい車を買いました",
+        usageLabel: "Perfect:Result",
+      }
+    },
     lesson: {
       situationJa: "大きな買い物や予定",
       jpLiteral: "彼らは新しい車を買う",
@@ -502,6 +766,23 @@ export const sentences: SentenceTemplate[] = [
     verbId: "walk",
     tail: "my dog every evening",
     allowedFutureModes: ["will", "goingTo", "progFuture"],
+    aspectOverrides: {
+      progressive: {
+        situationJa: "今、まさに外で犬を連れて歩いている最中のとき",
+        jpNatural: "（今）犬の散歩をしています",
+        usageLabel: "Progressive:InProgress",
+      },
+      perfect: {
+        situationJa: "「もう散歩は済ませたよ」という完了を言うとき",
+        jpNatural: "犬の散歩に行き終えました（もう家です）",
+        usageLabel: "Perfect:Result",
+      },
+      perfectProgressive: {
+        situationJa: "一時間前からずっと歩き続けていて、今も散歩中のとき",
+        jpNatural: "ずっと犬の散歩をし続けています",
+        usageLabel: "Perfect:Continuation",
+      }
+    },
     lesson: {
       situationJa: "夕方の決まった日課",
       jpLiteral: "私は（毎晩）犬の散歩をする",

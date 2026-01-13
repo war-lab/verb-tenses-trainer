@@ -66,7 +66,7 @@ const TrainerPage: React.FC = () => {
         whyJa: ["今の意向をあえて過去形で言うことで、心理的な距離を置き、丁寧さを表現します。"],
       };
     }
-    return getEffectiveLessonMeta(currentTemplate, tense, futureMode, futureNuance);
+    return getEffectiveLessonMeta(currentTemplate, tense, aspect, futureMode, futureNuance);
   }, [currentTemplate, tense, futureMode, futureNuance, pastUse, politePhraseIndex]);
 
   return (

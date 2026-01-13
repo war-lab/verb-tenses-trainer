@@ -102,6 +102,11 @@ export type SentenceTemplate = {
   allowedWillNuances?: FutureNuance[];
   willNuances?: Partial<Record<FutureNuance, Partial<LessonMeta>>>;
   modeOverrides?: Partial<Record<FutureMode, Partial<LessonMeta>>>; // Diff-based overrides
+  aspectOverrides?: Partial<{
+    perfect: Partial<LessonMeta>;
+    progressive: Partial<LessonMeta>;
+    perfectProgressive: Partial<LessonMeta>;
+  }>;
   restrictions?: {
     progressiveBad?: boolean;
     noteJa?: string;
