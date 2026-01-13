@@ -80,6 +80,7 @@ export type UsageLabel =
   | "Polite:Distance"
   | "Present:Habit"
   | "Present:Fact"
+  | "Past:Fact"
   | "Past:TimePoint";
 
 export type LessonMeta = {
@@ -101,12 +102,14 @@ export type SentenceTemplate = {
   allowedFutureModes?: FutureMode[];
   allowedWillNuances?: FutureNuance[];
   willNuances?: Partial<Record<FutureNuance, Partial<LessonMeta>>>;
+  pastWillNuances?: Partial<Record<FutureNuance, Partial<LessonMeta>>>;
   modeOverrides?: Partial<Record<FutureMode, Partial<LessonMeta>>>; // Diff-based overrides
   aspectOverrides?: Partial<{
     perfect: Partial<LessonMeta>;
     progressive: Partial<LessonMeta>;
     perfectProgressive: Partial<LessonMeta>;
   }>;
+  tenseOverrides?: Partial<Record<Tense, Partial<LessonMeta>>>;
   restrictions?: {
     progressiveBad?: boolean;
     noteJa?: string;

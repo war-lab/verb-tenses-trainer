@@ -33,7 +33,7 @@ export function conjugate(args: {
 
   // 1. Determine the path: Future vs Present/Past
   if (tense === "Future") {
-    handleFuture(subject, verb, aspect, futureMode, auxTokens, (t) => (mainVerbToken = t));
+    handleFuture(subject, verb, aspect, futureMode, tense, auxTokens, (t) => (mainVerbToken = t));
   } else if (tense === "Present") {
     handlePresent(subject, verb, aspect, auxTokens, (t) => (mainVerbToken = t));
   } else {
@@ -147,13 +147,15 @@ function handleFuture(
   verb: VerbForms,
   aspect: Aspect,
   mode: FutureMode,
+  tense: Tense,
   aux: Token[],
   setMain: (t: Token) => void
 ) {
   // Common Future modes: will, goingTo, progFuture, aboutTo
+  const isPast = tense === "Past";
 
   if (mode === "will") {
-    aux.push({ text: "will", kind: "aux", highlight: true });
+    aux.push({ text: isPast ? "would" : "will", kind: "aux", highlight: true });
     aux.push({ text: " ", kind: "normal" });
 
     if (aspect.perfect && aspect.progressive) {
@@ -171,13 +173,13 @@ function handleFuture(
       aux.push({ text: " ", kind: "normal" });
       setMain({ text: getPresentParticiple(verb), kind: "verb", highlight: true });
     } else {
-      setMain({ text: verb.base, kind: "verb" }); // Highlight usually not needed for plain base verb after will
+      setMain({ text: verb.base, kind: "verb" });
     }
     return;
   }
 
   if (mode === "goingTo") {
-    aux.push({ text: getBe(subject, "Present"), kind: "be", highlight: true });
+    aux.push({ text: getBe(subject, isPast ? "Past" : "Present"), kind: "be", highlight: true });
     aux.push({ text: " ", kind: "normal" });
     aux.push({ text: "going", kind: "aux", highlight: true });
     aux.push({ text: " ", kind: "normal" });
@@ -206,13 +208,17 @@ function handleFuture(
   }
 
   if (mode === "progFuture") {
-    // Simply Present Progressive
-    handlePresent(subject, verb, { perfect: false, progressive: true }, aux, setMain);
+    if (isPast) {
+      // Past Progressive (as Future in Past)
+      handlePast(subject, verb, { perfect: false, progressive: true }, aux, setMain);
+    } else {
+      handlePresent(subject, verb, { perfect: false, progressive: true }, aux, setMain);
+    }
     return;
   }
 
   if (mode === "aboutTo") {
-    aux.push({ text: getBe(subject, "Present"), kind: "be", highlight: true });
+    aux.push({ text: getBe(subject, isPast ? "Past" : "Present"), kind: "be", highlight: true });
     aux.push({ text: " ", kind: "normal" });
     aux.push({ text: "about", kind: "aux", highlight: true });
     aux.push({ text: " ", kind: "normal" });

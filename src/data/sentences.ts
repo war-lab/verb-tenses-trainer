@@ -23,6 +23,14 @@ export const sentences: SentenceTemplate[] = [
         whyJa: ["客観的な予測や推測としてwillを使います"],
       }
     },
+    pastWillNuances: {
+      decision: {
+        situationJa: "「よし、りんごを食べよう」とその場で過去に決めたとき",
+        jpNatural: "りんごを食べることにしました（食べようと思いました）",
+        usageLabel: "Future:Will:Decision",
+        whyJa: ["wouldは過去の時点での意志を表せます"],
+      }
+    },
     aspectOverrides: {
       progressive: {
         situationJa: "今、まさにりんごを食べている最中のとき",
@@ -41,6 +49,14 @@ export const sentences: SentenceTemplate[] = [
         jpNatural: "ずっとりんごを食べ続けています",
         usageLabel: "Perfect:Continuation",
         whyJa: ["have been + ing で『（過去から今まで）ずっと〜し続けている』という継続を表します"],
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去の特定の時点で、りんごを食べたという事実を言うとき",
+        jpNatural: "りんごを食べました",
+        usageLabel: "Past:Fact",
+        whyJa: ["過去の出来事は過去形を使います"],
       }
     },
     lesson: {
@@ -101,6 +117,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Result",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去の特定の日の空模様を述べるとき",
+        jpNatural: "その日は雨が降りました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "天候について話すとき",
       jpLiteral: "それは今日雨が降る",
@@ -131,6 +154,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Future:Will:Prediction",
       }
     },
+    pastWillNuances: {
+      promise: {
+        situationJa: "「明日からちゃんと学校行くよ」と過去に約束したとき",
+        jpNatural: "（きっと）登校すると言っていました",
+        usageLabel: "Future:Will:Promise",
+      }
+    },
     modeOverrides: {
       progFuture: {
         situationJa: "すでに予定として決まっているとき",
@@ -154,6 +184,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "休みなく学校に通い続けている状態や、その日の朝からずっと移動し続けているとき",
         jpNatural: "（ずっと）学校に行き続けています",
         usageLabel: "Perfect:Continuation",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去の特定の日に登校したという事実を言うとき",
+        jpNatural: "彼らは学校に行きました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -202,6 +239,17 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Future:Will:Decision",
       }
     },
+    pastWillNuances: {
+      offer: {
+        situationJa: "「写真をお撮りしましょうか？」と過去に申し出たとき",
+        jpNatural: "（私が）写真を撮ると申し出ました",
+        usageLabel: "Future:Will:Offer",
+      },
+      decision: {
+        situationJa: "「よし、撮ろう」と過去にその場で決めたとき",
+        jpNatural: "写真を撮ることにしました",
+      }
+    },
     modeOverrides: {
       aboutTo: {
         situationJa: "まさにシャッターを切ろうとしている瞬間",
@@ -219,6 +267,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "「もう撮ったよ」という完了や、「撮ったことがある」という経験を言うとき",
         jpNatural: "写真を撮り終えました / 撮ったことがあります",
         usageLabel: "Perfect:Result",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に写真を撮ったという行為の事実を述べるとき",
+        jpNatural: "写真を撮りました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -251,7 +306,7 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Progressive:InProgress",
       },
       perfect: {
-        situationJa: "「さっき読み終わった（読破した）」という完了や、「読したことがある」という経験を言うとき",
+        situationJa: "「さっき読み終わった（読破した）」という完了や、「読んだことがある」という経験を言うとき",
         jpNatural: "彼女はその本を読み終えました / 読んだことがあります",
         usageLabel: "Perfect:Result",
       },
@@ -259,6 +314,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "数時間前からずっと、今もなお本を読み続けているとき",
         jpNatural: "彼女はずっと本を読み続けています",
         usageLabel: "Perfect:Continuation",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に本を読んだという事実を述べるとき",
+        jpNatural: "彼女は本を読みました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -311,6 +373,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Result",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に夕食を作ったという事実を言うとき",
+        jpNatural: "彼女は夕食を作りました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "彼女の毎日の仕事や将来の予定",
       jpLiteral: "彼女は私たちのために夕食を作る",
@@ -337,6 +406,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "「さっきまで走っていた」という継続や、「あんなに速く走ったことがある」という経験を言うとき",
         jpNatural: "彼は（今まで）とても速く走っていました / 走ったことがあります",
         usageLabel: "Perfect:Continuation",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去のある時、彼がとても速く走ったことを述べるとき",
+        jpNatural: "彼はとても速く走りました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -374,6 +450,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Continuation",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に英語を勉強したという事実を述べるとき",
+        jpNatural: "私たちは英語を勉強しました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "私たちの学習習慣",
       jpLiteral: "私たちは毎日英語を勉強する",
@@ -405,6 +488,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "「さっきまでやっていた」という継続や、「テニスをしたことがある」という経験を言うとき",
         jpNatural: "あなたは（さっきまで）テニスをしていました / したことがあります",
         usageLabel: "Perfect:Experience",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去の特定の日にテニスをしたことを述べるとき",
+        jpNatural: "あなたはテニスをしました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -441,6 +531,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Result",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去の特定の日に車を洗ったことを述べるとき",
+        jpNatural: "彼は車を洗いました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "彼の週末の習慣など",
       jpLiteral: "彼は車を洗う",
@@ -466,6 +563,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "「さっきまで見ていた」という継続や、「あの番組を見たことがある」という経験を言うとき",
         jpNatural: "彼らは（さっきまで）テレビを見ていました / 見たことがあります",
         usageLabel: "Perfect:Experience",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "昨日などの特定の過去の時点でテレビを見たことを述べるとき",
+        jpNatural: "彼らはテレビを見ました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -495,6 +599,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Continuation",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に手紙を書いたという事実を述べるとき",
+        jpNatural: "手紙を書きました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "動作の事実や意思",
       jpLiteral: "私は友人へ手紙を書く",
@@ -522,6 +633,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Experience",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去のある時、彼女が歌を歌った事実を述べるとき",
+        jpNatural: "彼女は歌を歌いました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "彼女の才能や披露",
       jpLiteral: "彼女は美しい歌を歌う",
@@ -547,6 +665,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "「もう飲んじゃった」という完了や、「コーヒーを飲んだことがある（経験）」を言うとき",
         jpNatural: "彼はコーヒーを飲み終えました",
         usageLabel: "Perfect:Result",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "今日の朝、彼がコーヒーを飲んだ事実を言うとき",
+        jpNatural: "彼はコーヒーを飲みました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -586,6 +711,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "さっきからずっと、休みなく掃除をし続けているとき",
         jpNatural: "（ずっと）掃除をし続けています",
         usageLabel: "Perfect:Continuation",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に部屋を掃除したという事実を述べるとき",
+        jpNatural: "部屋を掃除しました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -628,6 +760,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Result",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去のある時、窓を開けたという動作の事実を言うとき",
+        jpNatural: "窓を開けました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "その場の動作",
       jpLiteral: "窓を開ける",
@@ -655,6 +794,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Result",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去にドアを閉めたという事実を言うとき",
+        jpNatural: "ドアを閉めました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "動作の事実",
       jpLiteral: "彼はドアを閉める",
@@ -680,6 +826,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "「さっきまで聴いていた」という継続や、「その曲を聴いたことがある」という経験を言うとき",
         jpNatural: "あなたは音楽を（さっきまで）聴いていました / 聴いたことがあります",
         usageLabel: "Perfect:Experience",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に音楽を聴いたという事実を述べるとき",
+        jpNatural: "音楽を聴きました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {
@@ -717,6 +870,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Result",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に（例えば去年など）東京を訪れたという事実を言うとき",
+        jpNatural: "東京を訪れました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "将来の予定",
       jpLiteral: "私たちは来月東京を訪れる",
@@ -751,6 +911,13 @@ export const sentences: SentenceTemplate[] = [
         usageLabel: "Perfect:Result",
       }
     },
+    tenseOverrides: {
+      Past: {
+        situationJa: "過去に新しい車を買ったという事実を言うとき",
+        jpNatural: "新しい車を買いました",
+        usageLabel: "Past:Fact",
+      }
+    },
     lesson: {
       situationJa: "大きな買い物や予定",
       jpLiteral: "彼らは新しい車を買う",
@@ -781,6 +948,13 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "一時間前からずっと歩き続けていて、今も散歩中のとき",
         jpNatural: "ずっと犬の散歩をし続けています",
         usageLabel: "Perfect:Continuation",
+      }
+    },
+    tenseOverrides: {
+      Past: {
+        situationJa: "昨日など、過去に犬を散歩させた事実を述べるとき",
+        jpNatural: "犬の散歩をさせました",
+        usageLabel: "Past:Fact",
       }
     },
     lesson: {

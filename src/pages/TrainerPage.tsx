@@ -143,7 +143,7 @@ const TrainerPage: React.FC = () => {
                     onChange={setAspect}
                   />
 
-                  {tense === "Future" && (
+                  {(tense === "Future" || (tense === "Past" && pastUse === "time")) && (
                     <FutureControls
                       template={currentTemplate}
                       selectedMode={futureMode}
