@@ -93,6 +93,7 @@ export type LessonMeta = {
   usageLabel?: UsageLabel;
   whyJa: string[];
   pitfallJa?: string;
+  ruleOfThumbJa?: string; // Short "one-line rule" for immediate decision making
   contrast?: MiniContrast;
 };
 

@@ -1,11 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Layers, GraduationCap, Compass } from 'lucide-react';
+import { Layers, GraduationCap, Compass, Dumbbell } from 'lucide-react';
 import { cn } from '../lib/cn';
 
 export const Header: React.FC = () => {
   const navItems = [
     { to: '/trainer', icon: GraduationCap, label: 'Trainer' },
+    { to: '/training', icon: Dumbbell, label: 'Training' },
     { to: '/compare', icon: Layers, label: 'Compare' },
     { to: '/future', icon: Compass, label: 'Future' },
   ];
