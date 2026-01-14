@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import TrainerPage from './pages/TrainerPage';
+import TrainingPage from './pages/TrainingPage';
 import { ComparePage } from './pages/ComparePage';
 import { FutureGuidePage } from './pages/FutureGuidePage';
 import { Header } from './components/Header';
@@ -13,6 +14,7 @@ function Layout() {
         <Routes>
           <Route path="/" element={<Navigate to="/trainer" replace />} />
           <Route path="/trainer" element={<TrainerPage />} />
+          <Route path="/training" element={<TrainingPage />} />
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/future" element={<FutureGuidePage />} />
         </Routes>
