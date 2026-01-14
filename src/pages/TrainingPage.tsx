@@ -13,8 +13,8 @@ import { AspectControls } from "../components/AspectControls";
 import { FutureControls } from "../components/FutureControls";
 import { GeneratedSentence } from "../components/GeneratedSentence";
 import { Button } from "../components/ui/Button";
-import { ChevronDown, CheckCircle, XCircle, ArrowRight, HelpCircle } from "lucide-react";
-import { LessonCard } from "../components/LessonCard";
+import { ChevronDown, CheckCircle, XCircle, ArrowRight, HelpCircle, X } from "lucide-react";
+import { LessonContent } from "../components/LessonContent";
 
 const TrainingPage: React.FC = () => {
   // Data
@@ -94,6 +94,24 @@ const TrainingPage: React.FC = () => {
     });
   }, [currentQuestion, result]);
 
+  // Helper to get CHOSEN sentence tokens (for comparison)
+  const chosenSentenceData = useMemo(() => {
+    if (!currentQuestion || !result) return null;
+    const template = sentences.find(s => s.id === currentQuestion.templateId);
+    if (!template) return null;
+    const verb = verbs.find(v => v.id === template.verbId);
+    if (!verb) return null;
+
+    return conjugate({
+      template,
+      verb,
+      tense: result.chosen.tense,
+      aspect: result.chosen.aspect,
+      futureMode: result.chosen.futureMode!,
+      futureNuance: result.chosen.willNuance
+    });
+  }, [currentQuestion, result]);
+
   if (!currentQuestion) {
     return <div className="p-8 text-center">Loading or No Questions...</div>;
   }
@@ -143,7 +161,7 @@ const TrainingPage: React.FC = () => {
           <AspectControls
             tense={answer.tense}
             aspect={answer.aspect}
-            futureMode={answer.futureMode}
+            futureMode={answer.futureMode || "will"}
             onChange={(a) => setAnswer({ ...answer, aspect: a })}
           />
 
@@ -166,11 +184,13 @@ const TrainingPage: React.FC = () => {
       </main>
 
       {/* 3. Feedback Overlay / Bottom Sheet */}
-      {result && correctSentenceData && (
-        <div className="fixed inset-x-0 bottom-0 z-20 bg-white/95 backdrop-blur shadow-[0_-4px_20px_rgba(0,0,0,0.1)] border-t border-slate-200 animate-in slide-in-from-bottom-10 duration-300 max-h-[85vh] overflow-y-auto">
-          <div className="max-w-2xl mx-auto p-4 lg:p-6 space-y-6">
+      {/* 3. Feedback Overlay / Bottom Sheet */}
+      {result && (
+        <div className="fixed inset-x-0 bottom-0 z-50 h-[85vh] flex flex-col bg-white shadow-[0_-4px_40px_rgba(0,0,0,0.2)] rounded-t-2xl animate-in slide-in-from-bottom-10 duration-300 isolate">
 
-            {/* Headline & Grade */}
+          {/* 1. Sheet Header (Fixed) */}
+          <div className="flex-none p-4 lg:p-6 border-b border-slate-100 flex items-start justify-between bg-white rounded-t-2xl z-10">
+            {/* Headline */}
             <div className="flex items-start gap-4">
               <div className={`p-3 rounded-full shrink-0 ${result.grade === "correct" ? "bg-green-100 text-green-600" :
                 result.grade === "acceptable" ? "bg-amber-100 text-amber-600" :
@@ -181,17 +201,30 @@ const TrainingPage: React.FC = () => {
                 {result.grade === "wrong" && <XCircle className="w-8 h-8" />}
               </div>
               <div className="space-y-1">
-                <h2 className={`text-xl font-bold ${result.grade === "correct" ? "text-green-700" :
+                <h2 className={`text-2xl font-black tracking-tight ${result.grade === "correct" ? "text-green-700" :
                   result.grade === "acceptable" ? "text-amber-700" :
                     "text-red-700"
                   }`}>
                   {result.headline}
                 </h2>
-                <div className="text-sm font-medium text-slate-600 bg-slate-100 px-2 py-1 rounded inline-block">
+                <div className="text-base font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg inline-block shadow-sm border border-slate-200/50">
                   💡 {result.ruleOfThumbJa}
                 </div>
               </div>
             </div>
+
+            {/* Close / Next Button */}
+            <button
+              onClick={handleNext}
+              className="p-2 -mr-2 -mt-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-500 transition-colors"
+              aria-label="Next Question"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* 2. Sheet Content (Scrollable) */}
+          <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6">
 
             {/* Diff Badges */}
             {result.diffBadges.length > 0 && (
@@ -206,13 +239,38 @@ const TrainingPage: React.FC = () => {
               </div>
             )}
 
-            {/* Correct Sentence Display */}
-            <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
-              <div className="text-xs text-indigo-400 font-bold uppercase mb-2">Correct Answer</div>
-              <GeneratedSentence
-                tokens={correctSentenceData.tokens}
-                breakdown={correctSentenceData.breakdown}
-              />
+            {/* Comparison Display */}
+            <div className="grid grid-cols-1 gap-4">
+              {/* Your Answer (Always show for clarity unless 100% match) */}
+              {/* Actually, if correct, showing both is redundant. Keep logic: show if not correct. */}
+              {/* Force show if acceptable? Yes. */}
+              {result.grade !== "correct" && chosenSentenceData && (
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 opacity-80">
+                  <div className="text-xs text-slate-500 font-bold uppercase mb-2">Your Answer</div>
+                  <GeneratedSentence
+                    tokens={chosenSentenceData.tokens}
+                    breakdown={chosenSentenceData.breakdown}
+                  />
+                </div>
+              )}
+
+              {/* Correct Sentence Display */}
+              <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-2 bg-indigo-100 rounded-bl-xl text-indigo-700">
+                  <CheckCircle className="w-4 h-4" />
+                </div>
+                <div className="text-xs text-indigo-400 font-bold uppercase mb-2">Correct Answer</div>
+                {correctSentenceData ? (
+                  <GeneratedSentence
+                    tokens={correctSentenceData.tokens}
+                    breakdown={correctSentenceData.breakdown}
+                  />
+                ) : (
+                  <div className="text-sm text-red-500 font-bold">
+                    Error generating correct sentence. Please report this issue.
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Acceptable Explanation */}
@@ -223,35 +281,29 @@ const TrainingPage: React.FC = () => {
               </div>
             )}
 
-            {/* Detailed Lesson Card */}
-            <LessonCard
-              isOpen={true}
-              onOpenChange={() => { }}
-              meta={{
-                situationJa: result.grade === "wrong" ? "あなたの選択" : currentQuestion.prompt.situationJa, // Use prompt situation usually
-                // Use Target details
-                jpNatural: currentQuestion.prompt.jpNatural,
-                jpLiteral: currentQuestion.prompt.jpLiteral || "",
-                whyJa: result.why || [],
-                pitfallJa: result.pitfall,
-                contrast: undefined, // Retrieve if needed, but lessonHelper logic provides it
-              }}
-            // We might need to fetch the FULL lesson meta including contrast from helper again if `result` doesn't carry it
-            // Actually TrainerPage does this via `getEffectiveLessonMeta`.
-            // But `result` in Training Mode carries specialized feedback. 
-            // Let's rely on `result.why` and generic explanation. 
-            // Wait, LessonCard expects `LessonMeta`. 
-            // Construct a temporary meta object for the card
-            />
-            {/* Note: LessonCard is designed to take a full Meta object. 
-                Our result only has parts. 
-                Ideally, we should fetch the full meta for the TARGET cell.
-            */}
-
-            <Button onClick={handleNext} variant="premium" size="lg" className="w-full">
-              Next Question <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+            {/* Detailed Lesson Content (No nested Sheet) */}
+            <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+              <LessonContent
+                meta={{
+                  situationJa: currentQuestion.prompt.situationJa,
+                  jpNatural: currentQuestion.prompt.jpNatural,
+                  jpLiteral: currentQuestion.prompt.jpLiteral || "",
+                  whyJa: result.why || [],
+                  pitfallJa: result.pitfall,
+                }}
+              />
+            </div>
+            {/* Added extra padding for scroll comfort */}
             <div className="h-4" />
+          </div>
+
+          {/* 3. Sheet Footer (Fixed) */}
+          <div className="flex-none p-4 bg-white border-t border-slate-100 safe-pb z-10">
+            <div className="max-w-2xl mx-auto">
+              <Button onClick={handleNext} variant="premium" size="lg" className="w-full shadow-lg">
+                Next Question <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
           </div>
         </div>
       )}
