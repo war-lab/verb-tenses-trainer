@@ -6,6 +6,7 @@ import { cn } from '../lib/cn';
 export const Header: React.FC = () => {
   const navItems = [
     { to: '/trainer', icon: GraduationCap, label: 'Trainer' },
+    { to: '/training', icon: Layers, label: 'Training' },
     { to: '/compare', icon: Layers, label: 'Compare' },
     { to: '/future', icon: Compass, label: 'Future' },
   ];
