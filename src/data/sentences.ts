@@ -134,6 +134,7 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "空の様子を見て予測するとき",
         jpNatural: "今日は雨が降りそうです",
         usageLabel: "Future:Will:Prediction",
+        ruleOfThumbJa: "漠然とした予測や推量は will",
       }
     },
     modeOverrides: {
@@ -141,6 +142,7 @@ export const sentences: SentenceTemplate[] = [
         situationJa: "すでに黒い雲が出てきていて、確実性を感じるとき",
         jpNatural: "雨が降りそうです（予兆がある）",
         whyJa: ["be going to は目に見える根拠がある時に使います"],
+        ruleOfThumbJa: "目に見える根拠がある予測は be going to",
       }
     },
     aspectOverrides: {
@@ -358,11 +360,13 @@ export const sentences: SentenceTemplate[] = [
         jpNatural: "私が写真をお撮りしますよ",
         usageLabel: "Future:Will:Offer",
         whyJa: ["その場での親切な申し出にはwillが最適です"],
+        ruleOfThumbJa: "その場での申し出・思いつきは will",
       },
       decision: {
         situationJa: "「よし、写真を撮ろう」とその場で決めたとき",
         jpNatural: "写真を撮ることにします",
         usageLabel: "Future:Will:Decision",
+        ruleOfThumbJa: "その場で決めた意思は will",
       }
     },
     aspectOverrides: {
